@@ -1,0 +1,20 @@
+from flask import Flask, request, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+import psycopg2
+
+app = Flask(__name__)
+
+# Connect to your database
+conn = psycopg2.connect("dbname=milehighworld user=youruser password=yourpassword host=yourhost")
+cursor = conn.cursor()
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+    cursor.execute("INSERT INTO Users (Username, Email, Password) VALUES (%s, %s, %s)",
+                   (data['username'], data['email'], hashed_password))
+    conn.commit()
+    return jsonify({'message': 'Registered successfully'}), 201
+
+@app.route('/login', method
