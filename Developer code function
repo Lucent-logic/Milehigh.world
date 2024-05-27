@@ -17,4 +17,4 @@ def register():
     conn.commit()
     return jsonify({'message': 'Registered successfully'}), 201
 
-@app.route('/login', method
+@app.route('/login'
